@@ -35,17 +35,19 @@ void pall(stack_t **stack, unsigned int __attribute__((unused)) line_number)
  */
 void push(stack_t **stack, unsigned int line_number)
 {
-	char *num;
+	char *token;
+	int num;
 	stack_t *temp, *tmp;
-
-	num = strtok(NULL, " ");
+	
+	token = strtok(NULL, " ");
 	tmp = *stack;
-	if (num == NULL || (_isdigit(num) != 0 && num[0] != '-'))
+	if (!token || (_isdigit(token) != 0 && token[0] != '-'))
 	{
 		dprintf(STDERR_FILENO, "L%u: Usage: push integer\n", line_number);
 		free_mem();
 		exit(EXIT_FAILURE);
 	}
+	num = atoi(token);
 	temp = (stack_t *) malloc(sizeof(stack_t));
 	if (!temp)
 	{
@@ -53,7 +55,7 @@ void push(stack_t **stack, unsigned int line_number)
 		free_mem();
 		exit(EXIT_FAILURE);
 	}
-	temp->n = atoi(num);
+	temp->n = num;
 	temp->next = NULL;
 	temp->prev = NULL;
 	if (g_vr.M == 0 || !tmp)
@@ -126,7 +128,7 @@ void swap(stack_t **stack, unsigned int line_number)
 	stack_t *temp;
 	int n;
 
-	if ((!(*stack)->next))
+	if ((!(*stack)->next) || (!(stack)))
 	{
 		dprintf(STDERR_FILENO, "L%u: cant swap, stack too short\n", line_number);
 		free_mem();

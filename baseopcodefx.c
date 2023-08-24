@@ -18,15 +18,21 @@ int  check_func(char *opcode, stack_t **stack, unsigned int line_number)
 		{"swap", swap},
 		{"add", add},
 		{"nop", nop},
+		{"sub", sub},
+		{"div", dv},
+		{"mul", mul},
+		{"mod", mod},
 		{NULL, NULL}
 	};
 	char *operation;
 	int i;
-
+	
 	i = 0;
 	operation = strtok(opcode, " ");
-
-	while (operation)
+	if ((operation[0]) == '#')
+		return (EXIT_SUCCESS);
+	
+	while (operation != NULL)
 	{
 		while (op_code[i].opcode)
 		{
@@ -78,9 +84,26 @@ void free_mem(void)
 	{
 		while (g_vr.head->next)
 		{
-			g_vr.head = g_vr.head->next;
+		;	g_vr.head = g_vr.head->next;
 			free(g_vr.head->prev);
 		}
 		free(g_vr.head);
 	}
 }
+/**
+ * initializer - function
+ * @g_vr: pointer
+ *
+ * Return: 0 success 1 fail
+ * Description: initializer
+ */
+int initializer(g_var *g_vr)
+{
+	g_vr->fd = NULL;
+	g_vr->buffer = NULL;
+	g_vr->status = 0;
+	g_vr->line_number = 1;
+	g_vr->M = 0;
+	return (EXIT_SUCCESS);
+}
+
